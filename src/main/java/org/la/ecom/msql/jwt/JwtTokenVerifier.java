@@ -23,6 +23,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+
+//this class not used
 public class JwtTokenVerifier{// extends OncePerRequestFilter{
 
 	public JwtTokenVerifier() {}
