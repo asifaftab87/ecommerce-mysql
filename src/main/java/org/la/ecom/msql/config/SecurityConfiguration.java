@@ -1,7 +1,9 @@
 package org.la.ecom.msql.config;
 
+import org.dozer.DozerBeanMapper;
 import org.la.ecom.msql.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -27,5 +29,9 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter {
 				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
+	@Bean
+	public DozerBeanMapper dozerBeanMapper() {
+		return new DozerBeanMapper();
+	}
 }
 

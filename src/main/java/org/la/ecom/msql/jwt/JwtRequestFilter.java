@@ -9,13 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.la.ecom.msql.rest.template.interceptor.RestTemplateInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,6 +26,9 @@ public class JwtRequestFilter  extends OncePerRequestFilter{
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	@Autowired
+	private RestTemplateInterceptor restTemplateInterceptor;
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -36,10 +38,15 @@ public class JwtRequestFilter  extends OncePerRequestFilter{
 		String username = null;
 		String jwt = null;
 		
+		if(authorizationHeader==null) {
+			throw new AccessDeniedException("Forbidden");
+		}
+		
 		if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")) {
 			
 			jwt = authorizationHeader.substring(7);
 			username = jwtUtil.extractUsername(jwt);
+			restTemplateInterceptor.setAuthorizationHeader(authorizationHeader);
 		}
 		
 		if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {

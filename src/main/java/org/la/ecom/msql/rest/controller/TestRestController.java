@@ -1,4 +1,4 @@
-package org.la.ecom.msql.rest;
+package org.la.ecom.msql.rest.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
